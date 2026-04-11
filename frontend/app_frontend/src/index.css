@@ -1,0 +1,16 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #f0f2f5;
+    color: #1e293b;
+    min-height: 100vh;
+}
+
+input, select, textarea, button {
+    font-family: inherit;
+}

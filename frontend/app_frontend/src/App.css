@@ -1,0 +1,60 @@
+/* Ajustes complementares ao Bootstrap */
+
+body {
+    background-color: #f8f9fa;
+}
+
+/* Sidebar - link hover suave */
+.nav-link {
+    border-radius: 8px;
+    transition: background 0.15s, color 0.15s;
+}
+
+.nav-link:hover {
+    background-color: #f1f3f5;
+}
+
+/* Cards sem borda com sombra suave */
+.card {
+    border-radius: 12px;
+}
+
+/* Progress bar arredondada */
+.progress {
+    border-radius: 99px;
+}
+
+/* Calendário - célula do dia atual */
+.border-primary {
+    border-width: 2px !important;
+}
+
+/* Botões do grupo de filtro arredondados */
+.btn-group .btn {
+    border-radius: 20px !important;
+    margin-right: 4px;
+    border-radius: 20px;
+}
+
+/* Formulário - label mais compacto */
+.form-label {
+    margin-bottom: 4px;
+    font-size: 13px;
+    color: #495057;
+}
+
+/* List-group sem borda lateral */
+.list-group-item {
+    border-left: none;
+    border-right: none;
+}
+
+.list-group-item:first-child {
+    border-top: none;
+    border-radius: 0;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+    border-radius: 0;
+}

@@ -1,0 +1,842 @@
+/* =========================================================
+   VARIÁVEIS
+   ========================================================= */
+:root {
+    --sidebar-w: 220px;
+    --primary: #4f46e5;
+    --primary-dark: #3730a3;
+    --primary-light: #eef2ff;
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-400: #94a3b8;
+    --gray-600: #475569;
+    --gray-800: #1e293b;
+    --white: #ffffff;
+    --radius: 10px;
+    --shadow: 0 1px 4px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
+}
+
+/* =========================================================
+   LAYOUT PRINCIPAL
+   ========================================================= */
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.main-content {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    padding: 32px;
+    background: var(--gray-100);
+    min-height: 100vh;
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+.sidebar {
+    width: var(--sidebar-w);
+    background: var(--white);
+    border-right: 1px solid var(--gray-200);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0;
+    height: 100vh;
+    z-index: 100;
+    padding: 0;
+}
+
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.logo-icon {
+    width: 34px; height: 34px;
+    background: var(--primary);
+    color: white;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.logo-text {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--gray-800);
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--radius);
+    color: var(--gray-600);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.15s, color 0.15s;
+}
+
+.sidebar-link:hover {
+    background: var(--gray-100);
+    color: var(--gray-800);
+}
+
+.sidebar-link.active {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.user-name {
+    font-size: 14px;
+    font-weight: 600;
+    display: block;
+    color: var(--gray-800);
+}
+
+.user-role {
+    font-size: 12px;
+    color: var(--gray-400);
+}
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+.dashboard-header {
+    margin-bottom: 28px;
+}
+
+.dashboard-header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--gray-800);
+}
+
+.dashboard-header p {
+    font-size: 14px;
+    color: var(--gray-400);
+    margin-top: 4px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 280px;
+    grid-template-rows: auto auto;
+    gap: 20px;
+}
+
+.card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+}
+
+.card-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--gray-400);
+    margin-bottom: 16px;
+}
+
+/* Card prioridade */
+.card-priority {
+    grid-column: 1;
+}
+
+.priority-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--danger);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.dot-alta { background: var(--danger); }
+.dot-media { background: var(--warning); }
+.dot-baixa { background: var(--success); }
+
+.priority-task-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: 4px;
+}
+
+.priority-discipline {
+    font-size: 13px;
+    color: var(--primary);
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.priority-due {
+    font-size: 12px;
+    color: var(--gray-400);
+}
+
+.priority-empty {
+    font-size: 15px;
+    color: var(--success);
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+/* Card prazos */
+.card-prazos {
+    grid-column: 2;
+}
+
+.prazo-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.prazo-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.prazo-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    flex: 1;
+}
+
+.badge-alta { background: var(--danger); }
+.badge-media { background: var(--warning); }
+.badge-baixa { background: var(--success); }
+
+.prazo-horas {
+    font-size: 12px;
+    color: var(--gray-400);
+    white-space: nowrap;
+    min-width: 40px;
+    text-align: right;
+}
+
+/* Card nova tarefa */
+.card-nova-tarefa {
+    grid-column: 3;
+    grid-row: 1 / 3;
+}
+
+.btn-nova-tarefa {
+    width: 100%;
+    padding: 10px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: background 0.15s;
+}
+
+.btn-nova-tarefa:hover {
+    background: var(--primary-dark);
+}
+
+.stats-mini {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--gray-50);
+    border-radius: 8px;
+}
+
+.stat-num {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--gray-600);
+}
+
+/* Card semana */
+.card-semana {
+    grid-column: 1 / 3;
+}
+
+.semana-grid {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.dia-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.dia-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-400);
+    text-transform: uppercase;
+}
+
+.dia-tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+
+.task-bar {
+    height: 18px;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.bar-alta { background: var(--danger); opacity: 0.85; }
+.bar-media { background: var(--warning); opacity: 0.85; }
+.bar-baixa { background: var(--success); opacity: 0.85; }
+.bar-vazia { background: var(--gray-100); }
+
+.progresso {
+    font-size: 12px;
+    color: var(--gray-400);
+    margin-top: 8px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--gray-100);
+    border-radius: 99px;
+    margin-top: 6px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 99px;
+    transition: width 0.4s;
+}
+
+/* =========================================================
+   PÁGINAS INTERNAS (DISCIPLINAS / TAREFAS)
+   ========================================================= */
+.page-container {
+    max-width: 960px;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.page-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gray-800);
+}
+
+.btn-add {
+    padding: 9px 18px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.btn-add:hover { background: var(--primary-dark); }
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--gray-400);
+}
+
+.empty-state span { font-size: 48px; display: block; margin-bottom: 12px; }
+.empty-state p { font-size: 15px; margin-bottom: 20px; }
+
+/* =========================================================
+   DISCIPLINAS - CARDS
+   ========================================================= */
+.disciplinas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+.disciplina-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.disciplina-nome {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin: 0;
+}
+
+.disciplina-codigo {
+    font-size: 11px;
+    background: var(--primary-light);
+    color: var(--primary);
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-weight: 600;
+    width: fit-content;
+}
+
+.disciplina-professor {
+    font-size: 13px;
+    color: var(--gray-600);
+}
+
+.disciplina-detalhes {
+    font-size: 12px;
+    color: var(--gray-400);
+}
+
+.disciplina-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+/* =========================================================
+   TAREFAS - LISTA
+   ========================================================= */
+.filtro-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.filtro-tab {
+    padding: 7px 18px;
+    border: 1px solid var(--gray-200);
+    background: var(--white);
+    border-radius: 99px;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--gray-600);
+    transition: all 0.15s;
+}
+
+.filtro-tab.ativo {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.tarefas-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tarefa-item {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.tarefa-item.concluida {
+    opacity: 0.55;
+}
+
+.tarefa-check {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--primary);
+}
+
+.tarefa-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.tarefa-nome {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-800);
+}
+
+.tarefa-disciplina {
+    font-size: 12px;
+    color: var(--gray-400);
+}
+
+.badge {
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.tarefa-data {
+    font-size: 12px;
+    color: var(--gray-400);
+    white-space: nowrap;
+}
+
+.tarefa-actions {
+    display: flex;
+    gap: 6px;
+}
+
+/* =========================================================
+   BOTÕES DE AÇÃO (EDITAR / EXCLUIR)
+   ========================================================= */
+.btn-editar, .btn-deletar, .btn-cancelar, .btn-salvar {
+    padding: 6px 14px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.15s;
+}
+
+.btn-editar {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.btn-deletar {
+    background: #fee2e2;
+    color: var(--danger);
+}
+
+.btn-cancelar {
+    background: var(--gray-100);
+    color: var(--gray-600);
+}
+
+.btn-salvar {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-editar:hover, .btn-deletar:hover, .btn-cancelar:hover, .btn-salvar:hover {
+    opacity: 0.8;
+}
+
+/* =========================================================
+   FORMULÁRIO
+   ========================================================= */
+.form-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: var(--shadow);
+    max-width: 680px;
+}
+
+.form-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: 24px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-full {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-600);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 9px 12px;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--gray-800);
+    background: var(--gray-50);
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--primary);
+    background: white;
+}
+
+.input-erro {
+    border-color: var(--danger) !important;
+}
+
+.erro-msg {
+    font-size: 12px;
+    color: var(--danger);
+}
+
+.form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 8px;
+}
+
+.btn-cancelar, .btn-salvar {
+    padding: 9px 22px;
+    font-size: 14px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--gray-600);
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.color-picker-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.color-input {
+    width: 48px;
+    height: 36px;
+    padding: 2px;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.color-preview {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--gray-200);
+}
+
+/* =========================================================
+   CALENDÁRIO
+   ========================================================= */
+.cal-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cal-titulo {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gray-800);
+    min-width: 160px;
+    text-align: center;
+}
+
+.btn-nav {
+    background: var(--gray-100);
+    border: none;
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+    cursor: pointer;
+    color: var(--gray-600);
+    transition: background 0.15s;
+    line-height: 1;
+}
+
+.btn-nav:hover { background: var(--gray-200); }
+
+.calendario-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+}
+
+.cal-header-dia {
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    padding: 6px 0;
+}
+
+.cal-cell {
+    min-height: 88px;
+    border-radius: 8px;
+    padding: 6px;
+    background: var(--gray-50);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.cal-vazia {
+    background: transparent;
+}
+
+.cal-hoje {
+    background: var(--primary-light);
+    border: 1.5px solid var(--primary);
+}
+
+.cal-num {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gray-800);
+}
+
+.cal-hoje .cal-num {
+    color: var(--primary);
+}
+
+.cal-tarefas {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cal-tarefa-pill {
+    font-size: 10px;
+    font-weight: 600;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 4px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.cal-mais {
+    font-size: 10px;
+    color: var(--gray-400);
+    padding-left: 3px;
+}
+
+/* =========================================================
+   UTILITÁRIOS
+   ========================================================= */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40vh;
+    font-size: 16px;
+    color: var(--gray-400);
+}
+
+.empty-msg {
+    font-size: 13px;
+    color: var(--gray-400);
+}
