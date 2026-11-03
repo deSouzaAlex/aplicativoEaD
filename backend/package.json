@@ -1,23 +1,56 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "API REST do sistema de apoio à organização acadêmica para estudantes EaD",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./index.js localhost 5000"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "jest --runInBand",
+    "test:cobertura": "jest --runInBand --coverage",
+    "seed": "node scripts/seed.js",
+    "migrar:legado": "node scripts/atribuirDadosLegados.js",
+    "exportar:dataset": "node scripts/exportarDataset.js",
+    "diagnostico": "node scripts/diagnostico.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "body-parser": "^2.2.2",
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.1",
     "express": "^5.2.1",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.4.1",
-    "morgan": "^1.10.1",
-    "nodemon": "^3.1.14"
+    "morgan": "^1.10.1"
+  },
+  "devDependencies": {
+    "jest": "^30.5.2",
+    "mongodb-memory-server": "^11.3.0",
+    "nodemon": "^3.1.14",
+    "supertest": "^7.3.1"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testTimeout": 30000,
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/tests/"
+    ],
+    "collectCoverageFrom": [
+      "routes/**/*.js",
+      "services/**/*.js",
+      "middleware/**/*.js",
+      "models/**/*.js"
+    ]
+  },
+  "directories": {
+    "test": "tests"
   }
 }

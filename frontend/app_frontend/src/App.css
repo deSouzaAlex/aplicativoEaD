@@ -58,3 +58,179 @@ body {
     border-bottom: none;
     border-radius: 0;
 }
+
+/* ---------- Layout responsivo (RNF02) ---------- */
+.app-layout {
+    min-height: 100vh;
+}
+
+.app-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    z-index: 1020;
+}
+
+.app-nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.app-main {
+    margin-left: 220px;
+    padding: 32px;
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+.app-main:focus {
+    outline: none;
+}
+
+@media (min-width: 768px) {
+    .border-md-bottom {
+        border-bottom: 1px solid var(--bs-border-color);
+    }
+}
+
+@media (max-width: 767.98px) {
+    .app-sidebar {
+        position: sticky;
+        width: 100%;
+        height: auto;
+        border-right: 0 !important;
+        border-bottom: 1px solid var(--bs-border-color);
+    }
+
+    .app-nav {
+        display: none;
+    }
+
+    .app-nav.aberto {
+        display: flex;
+    }
+
+    .app-main {
+        margin-left: 0;
+        padding: 16px;
+    }
+}
+
+/* ---------- Acessibilidade (WCAG 2.2) ---------- */
+.link-pular {
+    position: absolute;
+    left: -9999px;
+    top: 8px;
+    z-index: 2000;
+    padding: 8px 16px;
+    background: #0d6efd;
+    color: #fff;
+    border-radius: 6px;
+}
+
+.link-pular:focus {
+    left: 8px;
+}
+
+/* Foco sempre visível na navegação por teclado (critérios 2.4.7 e 2.4.11) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+.nav-link:focus-visible {
+    outline: 3px solid #0a58ca;
+    outline-offset: 2px;
+    box-shadow: none;
+}
+
+/* Tarefa concluída: atenuada sem comprometer o contraste mínimo do texto */
+.tarefa-concluida {
+    background: #f8f9fa;
+}
+
+.tarefa-concluida label,
+.tarefa-concluida .text-secondary {
+    color: #495057 !important;
+}
+
+details > summary {
+    cursor: pointer;
+}
+
+/* ---------- Visão da semana ---------- */
+.semana-grade {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 8px;
+}
+
+/* ---------- Calendário ---------- */
+.calendario-grade {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.calendario-linha {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 4px;
+}
+
+.calendario-celula {
+    min-height: 80px;
+    font-size: 12px;
+}
+
+.calendario-tarefa {
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dia-sobrecarga {
+    box-shadow: inset 0 0 0 2px #e0a800;
+}
+
+@media (max-width: 575.98px) {
+    .calendario-celula {
+        min-height: 56px;
+    }
+
+    .semana-grade {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+/* Ajustes de contraste para o fundo cinza claro (WCAG 1.4.3, razão mínima de 4,5:1) */
+.text-secondary {
+    color: #5a6169 !important;
+}
+
+.btn-outline-primary {
+    --bs-btn-color: #0a58ca;
+    --bs-btn-border-color: #0a58ca;
+}
+
+.btn-outline-secondary {
+    --bs-btn-color: #5a6169;
+    --bs-btn-border-color: #5a6169;
+}
+
+.btn-outline-danger {
+    --bs-btn-color: #b02a37;
+    --bs-btn-border-color: #b02a37;
+}
+
+.text-primary {
+    color: #0a58ca !important;
+}

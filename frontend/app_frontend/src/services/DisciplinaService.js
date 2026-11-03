@@ -1,14 +1,13 @@
-import axios from "axios";
+import api from "./api";
 
-const REST_API_BASE_URL = "http://localhost:3001/api/v1/disciplinas";
+const URL = "/disciplinas";
 
-export const getAllDisciplinas = () => axios.get(REST_API_BASE_URL);
+export const getAllDisciplinas = () => api.get(URL);
 
-export const createDisciplina = (disciplina) => axios.post(REST_API_BASE_URL, disciplina);
+export const createDisciplina = (disciplina) => api.post(URL, disciplina);
 
-export const getDisciplinaById = (id) => axios.get(REST_API_BASE_URL + "/" + id);
+export const getDisciplinaById = (id) => api.get(`${URL}/${id}`);
 
-export const updateDisciplina = (id, disciplina) =>
-    axios.put(REST_API_BASE_URL + "/" + id, disciplina);
+export const updateDisciplina = (id, disciplina) => api.put(`${URL}/${id}`, disciplina);
 
-export const deleteDisciplina = (id) => axios.delete(REST_API_BASE_URL + "/" + id);
+export const deleteDisciplina = (id) => api.delete(`${URL}/${id}`);

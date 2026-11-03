@@ -5,11 +5,15 @@ import {
     getDisciplinaById,
     updateDisciplina,
 } from "../../services/DisciplinaService";
+import { mensagemErro } from "../../utils/rotulos";
+import useTitulo from "../../hooks/useTitulo";
+import Alerta from "../Alerta";
 
 const DisciplinaComponent = () => {
     const { id } = useParams();
     const navigator = useNavigate();
     const isEdicao = Boolean(id);
+    useTitulo(isEdicao ? "Editar disciplina" : "Nova disciplina");
 
     const [form, setForm] = useState({
         nome: "",
@@ -21,14 +25,18 @@ const DisciplinaComponent = () => {
     });
 
     const [erros, setErros] = useState({});
+    const [erroGeral, setErroGeral] = useState("");
 
     useEffect(() => {
         if (isEdicao) {
             getDisciplinaById(id)
-                .then((response) => setForm(response.data))
-                .catch((error) => console.error(error));
+                .then((response) => {
+                    const { nome, codigo, professor, cargaHoraria, semestre, cor } = response.data;
+                    setForm({ nome, codigo, professor, cargaHoraria, semestre, cor: cor || "#4F46E5" });
+                })
+                .catch((error) => setErroGeral(mensagemErro(error, "Disciplina não encontrada.")));
         }
-    }, [id]);
+    }, [id, isEdicao]);
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -36,109 +44,72 @@ const DisciplinaComponent = () => {
 
     const validar = () => {
         const novosErros = {};
-        if (!form.nome.trim()) novosErros.nome = "Nome é obrigatório.";
-        if (!form.codigo.trim()) novosErros.codigo = "Código é obrigatório.";
-        if (!form.professor.trim()) novosErros.professor = "Professor é obrigatório.";
-        if (!form.cargaHoraria) novosErros.cargaHoraria = "Carga horária é obrigatória.";
-        if (!form.semestre.trim()) novosErros.semestre = "Semestre é obrigatório.";
+        if (!String(form.nome).trim()) novosErros.nome = "Nome é obrigatório.";
+        if (!String(form.codigo).trim()) novosErros.codigo = "Código é obrigatório.";
+        if (!String(form.professor).trim()) novosErros.professor = "Professor é obrigatório.";
+        if (!form.cargaHoraria || Number(form.cargaHoraria) <= 0) novosErros.cargaHoraria = "Informe uma carga horária maior que zero.";
+        if (!String(form.semestre).trim()) novosErros.semestre = "Semestre é obrigatório.";
         setErros(novosErros);
         return Object.keys(novosErros).length === 0;
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setErroGeral("");
         if (!validar()) return;
-        const operacao = isEdicao ? updateDisciplina(id, form) : createDisciplina(form);
+        const dados = { ...form, cargaHoraria: Number(form.cargaHoraria) };
+        const operacao = isEdicao ? updateDisciplina(id, dados) : createDisciplina(dados);
         operacao
             .then(() => navigator("/disciplinas"))
-            .catch((error) => console.error(error));
+            .catch((error) => setErroGeral(mensagemErro(error, "Não foi possível salvar a disciplina.")));
     };
+
+    // Campo de texto com rótulo associado e mensagem de erro anunciada (WCAG 1.3.1 e 3.3.1)
+    const campo = (nome, rotulo, props = {}, classeColuna = "col-12") => (
+        <div className={classeColuna}>
+            <label htmlFor={`disciplina-${nome}`} className="form-label fw-semibold">{rotulo}</label>
+            <input
+                id={`disciplina-${nome}`}
+                name={nome}
+                value={form[nome]}
+                onChange={handleChange}
+                aria-invalid={Boolean(erros[nome])}
+                aria-describedby={erros[nome] ? `erro-disciplina-${nome}` : undefined}
+                className={`form-control ${erros[nome] ? "is-invalid" : ""}`}
+                {...props}
+            />
+            {erros[nome] && <div id={`erro-disciplina-${nome}`} className="invalid-feedback">{erros[nome]}</div>}
+        </div>
+    );
 
     return (
         <div>
             <div className="d-flex align-items-center gap-2 mb-4">
-                <button className="btn btn-outline-secondary btn-sm" onClick={() => navigator("/disciplinas")}>
-                    <i className="bi bi-arrow-left"></i>
+                <button className="btn btn-outline-secondary btn-sm" onClick={() => navigator("/disciplinas")}
+                    aria-label="Voltar para a lista de disciplinas">
+                    <i className="bi bi-arrow-left" aria-hidden="true"></i>
                 </button>
-                <h2 className="fw-bold mb-0">
+                <h1 className="h2 fw-bold mb-0">
                     {isEdicao ? "Editar Disciplina" : "Nova Disciplina"}
-                </h2>
+                </h1>
             </div>
 
             <div className="card shadow-sm border-0" style={{ maxWidth: "680px" }}>
                 <div className="card-body p-4">
-                    <form onSubmit={handleSubmit}>
+                    <Alerta mensagem={erroGeral} />
+                    <form onSubmit={handleSubmit} noValidate>
                         <div className="row g-3">
-
-                            <div className="col-md-8">
-                                <label className="form-label fw-semibold">Nome da Disciplina</label>
-                                <input
-                                    type="text"
-                                    name="nome"
-                                    value={form.nome}
-                                    onChange={handleChange}
-                                    placeholder="Ex: Banco de Dados"
-                                    className={`form-control ${erros.nome ? "is-invalid" : ""}`}
-                                />
-                                {erros.nome && <div className="invalid-feedback">{erros.nome}</div>}
-                            </div>
+                            {campo("nome", "Nome da Disciplina", { type: "text", placeholder: "Ex: Banco de Dados", required: true }, "col-md-8")}
+                            {campo("codigo", "Código", { type: "text", placeholder: "Ex: BCC301", required: true }, "col-md-4")}
+                            {campo("professor", "Professor", { type: "text", placeholder: "Nome do professor", required: true })}
+                            {campo("cargaHoraria", "Carga Horária (h)", { type: "number", min: 1, placeholder: "Ex: 60", required: true }, "col-md-6")}
+                            {campo("semestre", "Semestre", { type: "text", placeholder: "Ex: 2026.2", required: true }, "col-md-6")}
 
                             <div className="col-md-4">
-                                <label className="form-label fw-semibold">Código</label>
-                                <input
-                                    type="text"
-                                    name="codigo"
-                                    value={form.codigo}
-                                    onChange={handleChange}
-                                    placeholder="Ex: BCC301"
-                                    className={`form-control ${erros.codigo ? "is-invalid" : ""}`}
-                                />
-                                {erros.codigo && <div className="invalid-feedback">{erros.codigo}</div>}
-                            </div>
-
-                            <div className="col-12">
-                                <label className="form-label fw-semibold">Professor</label>
-                                <input
-                                    type="text"
-                                    name="professor"
-                                    value={form.professor}
-                                    onChange={handleChange}
-                                    placeholder="Nome do professor"
-                                    className={`form-control ${erros.professor ? "is-invalid" : ""}`}
-                                />
-                                {erros.professor && <div className="invalid-feedback">{erros.professor}</div>}
-                            </div>
-
-                            <div className="col-md-6">
-                                <label className="form-label fw-semibold">Carga Horária (h)</label>
-                                <input
-                                    type="number"
-                                    name="cargaHoraria"
-                                    value={form.cargaHoraria}
-                                    onChange={handleChange}
-                                    placeholder="Ex: 60"
-                                    className={`form-control ${erros.cargaHoraria ? "is-invalid" : ""}`}
-                                />
-                                {erros.cargaHoraria && <div className="invalid-feedback">{erros.cargaHoraria}</div>}
-                            </div>
-
-                            <div className="col-md-6">
-                                <label className="form-label fw-semibold">Semestre</label>
-                                <input
-                                    type="text"
-                                    name="semestre"
-                                    value={form.semestre}
-                                    onChange={handleChange}
-                                    placeholder="Ex: 2026.2"
-                                    className={`form-control ${erros.semestre ? "is-invalid" : ""}`}
-                                />
-                                {erros.semestre && <div className="invalid-feedback">{erros.semestre}</div>}
-                            </div>
-
-                            <div className="col-md-4">
-                                <label className="form-label fw-semibold">Cor de identificação</label>
+                                <label htmlFor="disciplina-cor" className="form-label fw-semibold">Cor de identificação</label>
                                 <div className="d-flex align-items-center gap-2">
                                     <input
+                                        id="disciplina-cor"
                                         type="color"
                                         name="cor"
                                         value={form.cor}
@@ -146,7 +117,7 @@ const DisciplinaComponent = () => {
                                         className="form-control form-control-color"
                                         style={{ width: "60px", height: "38px" }}
                                     />
-                                    <span className="text-muted" style={{ fontSize: "13px" }}>{form.cor}</span>
+                                    <span className="text-secondary" style={{ fontSize: "13px" }} aria-hidden="true">{form.cor}</span>
                                 </div>
                             </div>
 
@@ -162,7 +133,6 @@ const DisciplinaComponent = () => {
                                     {isEdicao ? "Salvar Alterações" : "Cadastrar"}
                                 </button>
                             </div>
-
                         </div>
                     </form>
                 </div>

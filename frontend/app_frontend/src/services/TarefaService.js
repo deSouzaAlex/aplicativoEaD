@@ -1,14 +1,14 @@
-import axios from "axios";
+import api from "./api";
 
-const REST_API_BASE_URL = "http://localhost:3001/api/v1/tarefas";
+const URL = "/tarefas";
 
-export const getAllTarefas = () => axios.get(REST_API_BASE_URL);
+// params opcionais: { ordenar: "auto" | "prazo", situacao: "pendentes" | "concluidas", disciplina }
+export const getAllTarefas = (params) => api.get(URL, { params });
 
-export const createTarefa = (tarefa) => axios.post(REST_API_BASE_URL, tarefa);
+export const createTarefa = (tarefa) => api.post(URL, tarefa);
 
-export const getTarefaById = (id) => axios.get(REST_API_BASE_URL + "/" + id);
+export const getTarefaById = (id) => api.get(`${URL}/${id}`);
 
-export const updateTarefa = (id, tarefa) =>
-    axios.put(REST_API_BASE_URL + "/" + id, tarefa);
+export const updateTarefa = (id, tarefa) => api.put(`${URL}/${id}`, tarefa);
 
-export const deleteTarefa = (id) => axios.delete(REST_API_BASE_URL + "/" + id);
+export const deleteTarefa = (id) => api.delete(`${URL}/${id}`);
