@@ -11,13 +11,18 @@ app.listen(config.PORT, () => {
     console.log(`API disponível em: http://localhost:${config.PORT}${config.API_URL}`);
 });
 
+// Oculta usuário e senha da string de conexão antes de escrevê-la no log
+function ocultarCredenciais(uri) {
+    return String(uri).replace(/\/\/[^@/]*@/, "//***:***@");
+}
+
 async function conectarComTentativas() {
     for (let tentativa = 1; ; tentativa++) {
         try {
             await conectar(config.MONGODB_URI);
             return;
         } catch (err) {
-            console.error(`Falha ao conectar ao MongoDB em ${config.MONGODB_URI} (tentativa ${tentativa}): ${err.message}`);
+            console.error(`Falha ao conectar ao MongoDB em ${ocultarCredenciais(config.MONGODB_URI)} (tentativa ${tentativa}): ${err.message}`);
             console.error("Verifique se o MongoDB está em execução (brew services list). Nova tentativa em 5 s...");
             await mongoose.disconnect().catch(() => {});
             await new Promise((r) => setTimeout(r, 5000));
