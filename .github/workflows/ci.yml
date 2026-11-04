@@ -28,7 +28,7 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: backend/package-lock.json
-      - run: npm ci
+      - run: npm install --no-audit --no-fund
       - run: npm run test:cobertura
 
   frontend:
@@ -44,7 +44,7 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: frontend/app_frontend/package-lock.json
-      - run: npm ci
+      - run: npm install --no-audit --no-fund
       - run: npm run lint
       - run: npm test
       - run: npm run build
