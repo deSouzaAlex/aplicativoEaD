@@ -1,42 +1,33 @@
-const express = require("express");
-const app = express();
+const config = require("./config");
+const { conectar, mongoose } = require("./db/conn");
+const { criarApp } = require("./app");
 
-const conn = require("./db/conn");
+const app = criarApp();
 
-const cors = require("cors");
-app.use(cors());
-
-require("dotenv/config");
-
-const api = process.env.API_URL;
-const PORT = process.env.PORT || 3001;
-
-const bodyParser = require("body-parser");
-const morgan = require("morgan");
-
-app.use(bodyParser.json());
-app.use(express.json());
-app.use(morgan("tiny"));
-
-app.get("/", (req, res) => {
-    res.send("Servidor Acadêmico funcionando!");
+// O servidor HTTP sobe imediatamente; a conexão com o banco é feita em seguida,
+// com novas tentativas. Assim /api/v1/saude sempre responde e informa o estado do banco.
+app.listen(config.PORT, () => {
+    console.log(`Servidor rodando na porta ${config.PORT}`);
+    console.log(`API disponível em: http://localhost:${config.PORT}${config.API_URL}`);
 });
 
-const disciplinasRoutes = require("./routes/disciplinasRoute");
-const tarefasRoutes = require("./routes/tarefasRoute");
+// Oculta usuário e senha da string de conexão antes de escrevê-la no log
+function ocultarCredenciais(uri) {
+    return String(uri).replace(/\/\/[^@/]*@/, "//***:***@");
+}
 
-app.use(`${api}/disciplinas`, disciplinasRoutes);
-app.use(`${api}/tarefas`, tarefasRoutes);
+async function conectarComTentativas() {
+    for (let tentativa = 1; ; tentativa++) {
+        try {
+            await conectar(config.MONGODB_URI);
+            return;
+        } catch (err) {
+            console.error(`Falha ao conectar ao MongoDB em ${ocultarCredenciais(config.MONGODB_URI)} (tentativa ${tentativa}): ${err.message}`);
+            console.error("Verifique se o MongoDB está em execução (brew services list). Nova tentativa em 5 s...");
+            await mongoose.disconnect().catch(() => {});
+            await new Promise((r) => setTimeout(r, 5000));
+        }
+    }
+}
 
-app.use((req, res, next) => {
-    res.status(404).json({
-        erro: "Rota não encontrada",
-        tentou: req.url,
-        disponiveis: [`${api}/disciplinas`, `${api}/tarefas`],
-    });
-});
-
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
-    console.log(`API disponível em: http://localhost:${PORT}${api}`);
-});
+conectarComTentativas();

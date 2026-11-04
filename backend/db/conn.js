@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");
 
-async function main() {
-    await mongoose.connect("mongodb://localhost:27017/academico-app");
+async function conectar(uri) {
+    await mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 });
     console.log("Conectou ao MongoDB");
+    return mongoose.connection;
 }
 
-main().catch((err) => console.log(err));
-
-module.exports = mongoose;
+module.exports = { conectar, mongoose };
